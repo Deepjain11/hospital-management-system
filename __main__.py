@@ -1,19 +1,10 @@
-"""Entry-point for the :program:`celery` umbrella command."""
+"""
+Invokes django-admin when the django module is run as a script.
 
-import sys
+Example: python -m django check
+"""
 
-from . import maybe_patch_concurrency
+from django.core import management
 
-__all__ = ('main',)
-
-
-def main() -> None:
-    """Entrypoint to the ``celery`` umbrella command."""
-    if 'multi' not in sys.argv:
-        maybe_patch_concurrency()
-    from celery.bin.celery import main as _main
-    sys.exit(_main())
-
-
-if __name__ == '__main__':  # pragma: no cover
-    main()
+if __name__ == "__main__":
+    management.execute_from_command_line()
