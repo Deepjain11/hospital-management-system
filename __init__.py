@@ -1,24 +1,52 @@
-from django.utils.version import get_version
+from django.contrib.admin.decorators import action, display, register
+from django.contrib.admin.filters import (
+    AllValuesFieldListFilter,
+    BooleanFieldListFilter,
+    ChoicesFieldListFilter,
+    DateFieldListFilter,
+    EmptyFieldListFilter,
+    FieldListFilter,
+    ListFilter,
+    RelatedFieldListFilter,
+    RelatedOnlyFieldListFilter,
+    SimpleListFilter,
+)
+from django.contrib.admin.options import (
+    HORIZONTAL,
+    VERTICAL,
+    ModelAdmin,
+    ShowFacets,
+    StackedInline,
+    TabularInline,
+)
+from django.contrib.admin.sites import AdminSite, site
+from django.utils.module_loading import autodiscover_modules
 
-VERSION = (6, 0, 2, "final", 0)
+__all__ = [
+    "action",
+    "display",
+    "register",
+    "ModelAdmin",
+    "HORIZONTAL",
+    "VERTICAL",
+    "StackedInline",
+    "TabularInline",
+    "AdminSite",
+    "site",
+    "ListFilter",
+    "SimpleListFilter",
+    "FieldListFilter",
+    "BooleanFieldListFilter",
+    "RelatedFieldListFilter",
+    "ChoicesFieldListFilter",
+    "DateFieldListFilter",
+    "AllValuesFieldListFilter",
+    "EmptyFieldListFilter",
+    "RelatedOnlyFieldListFilter",
+    "ShowFacets",
+    "autodiscover",
+]
 
-__version__ = get_version(VERSION)
 
-
-def setup(set_prefix=True):
-    """
-    Configure the settings (this happens as a side effect of accessing the
-    first setting), configure logging and populate the app registry.
-    Set the thread-local urlresolvers script prefix if `set_prefix` is True.
-    """
-    from django.apps import apps
-    from django.conf import settings
-    from django.urls import set_script_prefix
-    from django.utils.log import configure_logging
-
-    configure_logging(settings.LOGGING_CONFIG, settings.LOGGING)
-    if set_prefix:
-        set_script_prefix(
-            "/" if settings.FORCE_SCRIPT_NAME is None else settings.FORCE_SCRIPT_NAME
-        )
-    apps.populate(settings.INSTALLED_APPS)
+def autodiscover():
+    autodiscover_modules("admin", register_to=site)
